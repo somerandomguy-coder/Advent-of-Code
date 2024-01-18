@@ -1,7 +1,7 @@
 # Read file
-inputfile = open(r"C:\Users\Nam Le\Documents\Coding\AoC2023\day1_input.txt", "r")
+filename = open(r"day1/day1_input.txt", "r")
 ans = 0
-for line in inputfile:
+for line in filename:
     n = len(line)
 
 # part 2
