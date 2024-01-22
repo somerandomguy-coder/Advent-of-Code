@@ -1,6 +1,6 @@
 # symbol = set()
 symbol = ['+', '=', '*', '#', '-', '&', '@', '%', '/', '$']
-filename = open(r"day3/day3_test_input1.txt", "r")
+filename = open(r"day3_input.txt", "r")
 # for line in filename:
     # for char in line:
     #     if char.isnumeric() == False and char != ".":
@@ -9,51 +9,100 @@ filename = open(r"day3/day3_test_input1.txt", "r")
 matrix = filename.read().split()
 for i in range(len(matrix)):
     matrix[i] = list(matrix[i])
-print(matrix)
-
 
 def is_surrounded(r, c): #row, column
+    #first row
+    if r == 0:
+        if matrix[r][c-1] in symbol:
+            return True
+        if matrix[r][c+1] in symbol:
+            return True
+        if matrix[r+1][c+1] in symbol:
+            return True
+        if matrix[r+1][c] in symbol:
+            return True
+        if matrix[r+1][c-1] in symbol:
+            return True
+        else: 
+            return False
+    #last row
+    if r == len(matrix)-1:
+        if matrix[r-1][c-1] in symbol:
+            return True
+        if matrix[r][c-1] in symbol:
+            return True
+        if matrix[r-1][c] in symbol:
+            return True
+        if matrix[r-1][c+1] in symbol:
+            return True
+        if matrix[r][c+1] in symbol:
+            return True
+        else:
+            return False
+    #first column
+    if c == 0:
+        if matrix[r-1][c] in symbol:
+            return True
+        if matrix[r-1][c+1] in symbol:
+            return True
+        if matrix[r][c+1] in symbol:
+            return True
+        if matrix[r+1][c+1] in symbol:
+            return True
+        if matrix[r+1][c] in symbol:
+            return True
+        else: 
+            return False
+    #last column
+    if c == len(matrix[0])-1:
+        if matrix[r-1][c-1] in symbol:
+            return True
+        if matrix[r][c-1] in symbol:
+            return True
+        if matrix[r-1][c] in symbol:
+            return True
+        if matrix[r+1][c] in symbol:
+            return True
+        if matrix[r+1][c-1] in symbol:
+            return True
+        else: 
+            return False
+    #other normal object
     if matrix[r-1][c-1] in symbol:
         return True
     if matrix[r][c-1] in symbol:
         return True
-    if matrix[r+1][c-1] in symbol:
-        return True
     if matrix[r-1][c] in symbol:
-        return True
-    if matrix[r+1][c] in symbol:
         return True
     if matrix[r-1][c+1] in symbol:
         return True
     if matrix[r][c+1] in symbol:
-        return True
+        return True    
     if matrix[r+1][c+1] in symbol:
+        return True
+    if matrix[r+1][c] in symbol:
+        return True
+    if matrix[r+1][c-1] in symbol:
         return True
     else:
         return False
-#find number
-# i = 0
-# j = 0
-# while i < len(matrix):
-#     while j < len(matrix[0]):
-#         if matrix[i][j].isnumeric()==True:
-#             cur_num = matrix[i][j]
-#             while cur_num.isnumeric()==True:
-#                 if is_surrounded == 
 
-index = set()
+def take_number(row, column, long):
+    number = "0"
+    for num in range(long):
+        number+=matrix[row][column+num]
+    return int(number[1:])
+
 dic = {}
 for i in range(len(matrix)):
     j = 0
     while j < len(matrix[0]):
         if matrix[i][j].isnumeric() == True:
-            first_index = j
             cur_index = j
             jump = 0
             while cur_index < len(matrix[0]):
                 if matrix[i][cur_index].isnumeric() == True:
-                    dic[str(i)+str(j)] = {"index": first_index, "long":jump+1}
-                    index.add()
+                    dic[str(i)+" "+str(j)] = {"long":jump+1}
                     cur_index += 1
                     jump+=1
                 else: 
@@ -63,5 +112,13 @@ for i in range(len(matrix)):
         else:
             j+=1
 
-print(dic)
-print(index)
+ans = 0
+for i in range(len(matrix)):
+    for j in range(len(matrix[0])):
+        if str(i) + " "+str(j) in dic:
+            for k in range(dic[str(i)+" "+str(j)]["long"]):
+                if is_surrounded(i, j+k) == True:
+                    ans += take_number(i,j,dic[str(i)+" "+str(j)]["long"])
+                    del dic[str(i)+" "+str(j)]
+                    break
+print(ans)
